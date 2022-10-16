@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using MovieCatalogBackend.Context;
+using MovieCatalogBackend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +11,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddScoped<IUserAddService, UserAddService>();
 
 //DB:
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -20,6 +22,7 @@ var app = builder.Build();
 using var serviceScope=app.Services.CreateScope();
 var dbContext = serviceScope.ServiceProvider.GetService<MovieCatalogDbContext>();
 dbContext?.Database.Migrate();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
