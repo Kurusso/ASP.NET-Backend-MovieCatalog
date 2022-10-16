@@ -14,7 +14,6 @@ namespace MovieCatalogBackend.Services
         }
         public async Task AddUser(UserRegisterModel model)
         {
-            //BadRequest("User already exists")
 
             var result = _context.Users.FirstOrDefault(p => p.UserName == model.UserName);
             var result2 = _context.Users.FirstOrDefault(p => p.Email == model.Email);
