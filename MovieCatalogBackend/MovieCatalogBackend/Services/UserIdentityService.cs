@@ -12,8 +12,9 @@ namespace MovieCatalogBackend.Services
         }
         public ClaimsIdentity GetIdentity(string username, string password)
         {
-            var user = _context.Users.FirstOrDefault(x => x.UserName == username && x.Password == password);
-            if (user == null)
+            var user = _context.Users.FirstOrDefault(x => x.UserName == username);
+            bool correctPasswor = BCrypt.Net.BCrypt.Verify(password, user.Password);
+            if (user == null || !correctPasswor)
             {
                 return null;
             }

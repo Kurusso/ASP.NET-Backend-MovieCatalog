@@ -21,9 +21,10 @@ namespace MovieCatalogBackend.Services
             {
                 await _context.Users.AddAsync(new UserDbModel
                 {
+                    
                     Name = model.Name,
                     Email = model.Email,
-                    Password = model.Password,
+                    Password = BCrypt.Net.BCrypt.HashPassword(model.Password),
                     UserName = model.UserName,
                     BirthDate = model.BirthDate,
                     Gender = model.Gender,

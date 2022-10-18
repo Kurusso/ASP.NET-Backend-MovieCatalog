@@ -16,7 +16,7 @@ namespace MovieCatalogBackend.Models
         public string Name { get; set; }
 
         [Required]
-        [PasswordPropertyText]
+        [DataType(DataType.Password)]
         [MinLength(3)]
         [MaxLength(20)]
         public string Password { get; set; }
