@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MovieCatalogBackend.Configurations;
 using MovieCatalogBackend.Models;
@@ -51,7 +52,7 @@ namespace MovieCatalogBackend.Controllers
                 audience:JwtConfiguration.Audience,
                 notBefore:now,
                 claims:identity.Claims,
-                expires: now.Add(new TimeSpan(0,0,30,0)),
+                expires: now.Add(new TimeSpan(0,0,JwtConfiguration.Lifetime,0)),
                 signingCredentials: new SigningCredentials(JwtConfiguration.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
                 var encodedJwt= new JwtSecurityTokenHandler().WriteToken(jwt);
             var response = new
@@ -61,6 +62,22 @@ namespace MovieCatalogBackend.Controllers
             };
             return new JsonResult(response);
                 
+        }
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            var response = new
+            {
+                access_token = "",
+                message = "Logged out"
+            };
+            return new JsonResult(response);
+        }
+        [HttpGet]
+        [Authorize]
+        public IActionResult Test()
+        {
+            return Ok(User.Identity.Name);
         }
     }
 }
