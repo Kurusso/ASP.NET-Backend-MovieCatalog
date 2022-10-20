@@ -1,0 +1,8 @@
+﻿namespace MovieCatalogBackend.Models.DTO
+{
+    public class MoviesPagedListModel
+    {
+        public List<MovieElementModel> Movies { get; set; }
+        public PageInfoModel PageInfo { get; set; }
+    }
+}
