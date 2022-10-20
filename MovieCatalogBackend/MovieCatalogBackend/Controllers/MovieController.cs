@@ -36,6 +36,18 @@ namespace MovieCatalogBackend.Controllers
             }
 
         }
+        [HttpGet("details/{id}")]
+        public async Task<IActionResult> GetMovieById(Guid id)
+        {
+            try
+            {
+                return Ok(await _filmPageGetService.GetFilmById(id));
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            } 
+        }
     }
 }
 

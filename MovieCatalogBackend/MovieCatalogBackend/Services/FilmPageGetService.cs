@@ -36,9 +36,35 @@ namespace MovieCatalogBackend.Services
             Movies = _context.Movies.Skip(_pageSize*(page-1)).Take(_pageSize).ToList();
 
 
-            MoviesElements= Movies.Select(x => new MovieElementModel() { Country=x.Country, Genres=x.Genres, Id=x.Id, Name=x.Name, Poster=x.Poster, Year=x.Year} ).ToList();
+            MoviesElements = Movies.Select(x => new MovieElementModel() { Country=x.Country, Genres=x.Genres, Id=x.Id, Name=x.Name, Poster=x.Poster, Year=x.Year} ).ToList();
 
             return new PageModel { MovieElements=MoviesElements, PageInfoModel=new PageInfoModel { CurrentPage=page, PageCount=_pageCount, PageSize=MoviesElements.Count()} };
+        }
+
+        public async Task<MovieDetailsModel> GetFilmById(Guid id)
+        {
+            var movie = _context.Movies.FirstOrDefault(x => x.Id == id);
+            if(movie == null)
+            {
+                throw new Exception("Film with this id doesn't exists");
+            }
+            return new MovieDetailsModel
+            {
+                AgeLimit = movie.AgeLimit,
+                Budget = movie.Budget,
+                Country = movie.Country,
+                Genres = movie.Genres,
+                Id = movie.Id,
+                Name = movie.Name,
+                Poster = movie.Poster,
+                Year = movie.Year,
+                Tagline = movie.Tagline,
+                Time = movie.Time,
+                Description = movie.Description,
+                Director = movie.Director,
+                Fees = movie.Fees
+            };
+            
         }
     }
 }

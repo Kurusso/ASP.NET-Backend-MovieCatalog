@@ -1,11 +1,9 @@
-﻿using MovieCatalogBackend.Models.DTO;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace MovieCatalogBackend.Models
+namespace MovieCatalogBackend.Models.DTO
 {
-    public class MovieDbModel
+    public class MovieDetailsModel
     {
-        [Key]
         public Guid Id { get; set; }
 
         [Required]
