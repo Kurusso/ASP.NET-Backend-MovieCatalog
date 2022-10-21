@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserAddService, UserAddService>();
-
+builder.Services.AddScoped<IFilmPageGetService, FilmPageGetService>();
 //DB:
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<MovieCatalogDbContext>(options => options.UseSqlServer(connection));
