@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using MovieCatalogBackend.Configurations;
 using MovieCatalogBackend.Context;
 using MovieCatalogBackend.Services;
 
@@ -13,11 +16,33 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserAddService, UserAddService>();
 builder.Services.AddScoped<IFilmPageGetService, FilmPageGetService>();
+builder.Services.AddScoped<IUserIdentityService, UserIdentityService>();
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = JwtConfiguration.Issuer,
+            ValidateAudience = true,
+            ValidAudience = JwtConfiguration.Audience,
+            ValidateLifetime= true,
+            IssuerSigningKey = JwtConfiguration.GetSymmetricSecurityKey(),
+            ValidateIssuerSigningKey= true,
+
+        };
+    });
+
 //DB:
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<MovieCatalogDbContext>(options => options.UseSqlServer(connection));
 
 var app = builder.Build();
+//Auth init:
+app.UseAuthentication();
+app.UseAuthorization();
+
 //Db init and update:
 using var serviceScope=app.Services.CreateScope();
 var dbContext = serviceScope.ServiceProvider.GetService<MovieCatalogDbContext>();
