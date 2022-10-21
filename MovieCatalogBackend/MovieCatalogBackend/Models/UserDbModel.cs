@@ -18,6 +18,7 @@ namespace MovieCatalogBackend.Models
 
         public DateTime BirthDate { get; set; }
 
+        public List<ReviewDbModel>? Reviews { get; set; }
         public Gender? Gender { get; set; }
     }
 }

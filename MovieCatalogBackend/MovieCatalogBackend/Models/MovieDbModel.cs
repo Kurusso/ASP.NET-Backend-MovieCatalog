@@ -23,6 +23,8 @@ namespace MovieCatalogBackend.Models
         [Required]
         public List<GenreModel> Genres { get; set; }
 
+        public List<ReviewDbModel>? Reviews { get; set; }
+
         public int Time { get; set; }
 
         public string? Tagline { get; set; }
