@@ -12,8 +12,8 @@ using MovieCatalogBackend.Context;
 namespace MovieCatalogBackend.Migrations
 {
     [DbContext(typeof(MovieCatalogDbContext))]
-    [Migration("20221021081528_AddReviews")]
-    partial class AddReviews
+    [Migration("20221022150753_tested")]
+    partial class tested
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -106,11 +106,11 @@ namespace MovieCatalogBackend.Migrations
                     b.Property<bool>("IsAnonymus")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("MovieDbModelId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Rating")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("ReviewOnMovieId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ReviewText")
                         .HasColumnType("nvarchar(max)");
@@ -119,7 +119,7 @@ namespace MovieCatalogBackend.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("MovieDbModelId");
+                    b.HasIndex("ReviewOnMovieId");
 
                     b.ToTable("Reviews");
                 });
@@ -174,11 +174,15 @@ namespace MovieCatalogBackend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MovieCatalogBackend.Models.MovieDbModel", null)
+                    b.HasOne("MovieCatalogBackend.Models.MovieDbModel", "ReviewOnMovie")
                         .WithMany("Reviews")
-                        .HasForeignKey("MovieDbModelId");
+                        .HasForeignKey("ReviewOnMovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Author");
+
+                    b.Navigation("ReviewOnMovie");
                 });
 
             modelBuilder.Entity("MovieCatalogBackend.Models.MovieDbModel", b =>

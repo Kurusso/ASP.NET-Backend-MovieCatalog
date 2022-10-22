@@ -6,7 +6,7 @@ namespace MovieCatalogBackend.Models
     public class UserDbModel
     {
         [Key]
-        public int Id { get; set; }
+       public int Id { get; set; }
 
         public string UserName { get; set; }
 
@@ -18,7 +18,8 @@ namespace MovieCatalogBackend.Models
 
         public DateTime BirthDate { get; set; }
 
-        public List<ReviewDbModel>? Reviews { get; set; }
+        public ICollection<ReviewDbModel>? Reviews { get; set; }
+
         public Gender? Gender { get; set; }
     }
 }

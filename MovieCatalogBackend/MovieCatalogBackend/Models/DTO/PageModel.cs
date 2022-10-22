@@ -2,7 +2,7 @@
 {
     public class PageModel
     {
-        public List<MovieElementModel> MovieElements { get; set; }
+        public ICollection<MovieElementModel> MovieElements { get; set; }
         public PageInfoModel PageInfoModel { get; set; }
     }
 }

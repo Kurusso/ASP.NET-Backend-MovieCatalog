@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MovieCatalogBackend.Context;
 using MovieCatalogBackend.Migrations;
 using MovieCatalogBackend.Models;
@@ -51,7 +52,8 @@ namespace MovieCatalogBackend.Services
         public async Task<MovieDetailsModel> GetFilmById(Guid id)
         {
             var movie = _context.Movies.FirstOrDefault(x => x.Id == id);
-            if(movie == null)
+            var reviews = _context.Reviews.Include(x => x.ReviewOnMovie).Where(u => u.ReviewOnMovie.Id==id).ToList();
+            if (movie == null)
             {
                 throw new Exception("Film with this id doesn't exists");
             }
@@ -69,7 +71,8 @@ namespace MovieCatalogBackend.Services
                 Time = movie.Time,
                 Description = movie.Description,
                 Director = movie.Director,
-                Fees = movie.Fees
+                Fees = movie.Fees,
+                Reviews = reviews,
             };
             
         }

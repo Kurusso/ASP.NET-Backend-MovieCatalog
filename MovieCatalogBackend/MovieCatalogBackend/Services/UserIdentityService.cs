@@ -1,4 +1,5 @@
-﻿using MovieCatalogBackend.Context;
+﻿using Microsoft.IdentityModel.JsonWebTokens;
+using MovieCatalogBackend.Context;
 using System.Security.Claims;
 
 namespace MovieCatalogBackend.Services
@@ -20,10 +21,12 @@ namespace MovieCatalogBackend.Services
             }
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
+                new Claim("IdClaim", user.Id.ToString())
             };
             var claimsIdentity = new ClaimsIdentity(claims, "Token",ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             return claimsIdentity;
         }
+        
     }
 }

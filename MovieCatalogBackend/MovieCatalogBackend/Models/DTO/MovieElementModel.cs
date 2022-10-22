@@ -7,7 +7,7 @@
         public string? Poster { get; set; }
         public int Year { get; set; }
         public string? Country { get; set; }
-        public List<GenreModel> Genres { get; set; }
-        public List<ReviewShortModel>? Reviews { get; set; }
+        public ICollection<GenreModel> Genres { get; set; }
+        public ICollection<ReviewShortModel>? Reviews { get; set; }
     }
 }

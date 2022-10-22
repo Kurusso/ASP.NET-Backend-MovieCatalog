@@ -16,9 +16,9 @@ namespace MovieCatalogBackend.Models.DTO
         public string? Country { get; set; }
 
         [Required]
-        public List<GenreModel> Genres { get; set; }
+        public ICollection<GenreModel> Genres { get; set; }
 
-        public List<ReviewDbModel>? Reviews { get; set; }
+        public ICollection<ReviewDbModel>? Reviews { get; set; }
 
         public int Time { get; set; }
 
