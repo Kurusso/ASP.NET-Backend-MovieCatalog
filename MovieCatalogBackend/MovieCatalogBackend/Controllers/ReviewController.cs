@@ -34,5 +34,34 @@ namespace MovieCatalogBackend.Controllers
             }
             
         }
+        [HttpPut("{movieId}/review/{id}/edit")]
+        [Authorize]
+        public async Task<IActionResult> Put(Guid movieId, Guid id, ReviewModifyModel model)
+        {
+            try
+            {
+               await _reviewAddService.UpdateReview(model, User.FindFirst("IdClaim").Value, movieId, id);
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        [HttpDelete("{movieId}/review/{id}/delete")]
+        [Authorize]
+        public async Task<IActionResult> Delete(Guid movieId, Guid id)
+        {
+            try
+            {
+                await _reviewAddService.DeleteReview(User.FindFirst("IdClaim").Value, id, movieId);
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            
+        }
     }
 }
