@@ -16,6 +16,11 @@ namespace MovieCatalogBackend.Services
         {
             var User = _context.Users.Find(int.Parse(userId));
             var Movie = _context.Movies.Find(MovieId);
+            var currentReview = _context.Reviews.FirstOrDefault(x => x.AuthorId == int.Parse(userId) && x.ReviewOnMovieID==MovieId);
+            if (currentReview != null)
+            {
+                throw new Exception("You already have a review on this movie!");
+            }
             if(User == null)
             {
                 throw new Exception("Incorrect User Id");
