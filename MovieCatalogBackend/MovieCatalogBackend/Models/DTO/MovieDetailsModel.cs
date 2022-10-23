@@ -18,7 +18,7 @@ namespace MovieCatalogBackend.Models.DTO
         [Required]
         public ICollection<GenreModel> Genres { get; set; }
 
-        public ICollection<ReviewDbModel>? Reviews { get; set; }
+        public ICollection<ReviewModel>? Reviews { get; set; }
 
         public int Time { get; set; }
 

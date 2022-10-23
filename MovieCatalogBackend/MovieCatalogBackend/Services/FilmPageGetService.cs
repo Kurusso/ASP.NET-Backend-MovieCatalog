@@ -36,15 +36,16 @@ namespace MovieCatalogBackend.Services
 
             Movies = _context.Movies.Skip(_pageSize*(page-1)).Take(_pageSize).ToList();
 
-
             MoviesElements = Movies.Select(x => new MovieElementModel() 
             { 
                 Country=x.Country, 
                 Genres=x.Genres, 
-                Id=x.Id, Name=x.Name, 
+                Id=x.Id, 
+                Name=x.Name, 
                 Poster=x.Poster, 
-                Year=x.Year} )
-                .ToList();
+                Year=x.Year,
+                Reviews= _context.Reviews.Where(r => r.ReviewOnMovieID == x.Id).Select(u => new ReviewShortModel {Id=u.Id, Rating=u.Rating }).ToList()
+            } ).ToList();
 
             return new PageModel { MovieElements=MoviesElements, PageInfoModel=new PageInfoModel { CurrentPage=page, PageCount=_pageCount, PageSize=MoviesElements.Count()} };
         }
@@ -52,7 +53,20 @@ namespace MovieCatalogBackend.Services
         public async Task<MovieDetailsModel> GetFilmById(Guid id)
         {
             var movie = _context.Movies.FirstOrDefault(x => x.Id == id);
-            var reviews = _context.Reviews.Include(x => x.ReviewOnMovie).Where(u => u.ReviewOnMovie.Id==id).ToList();
+            var reviews = _context.Reviews.Where(x => x.ReviewOnMovieID == id).Select(u => new ReviewModel
+            {
+                Author = new UserShortModel
+                {
+                    Avatar = u.Author.Avatar,
+                    NickName = u.Author.UserName,
+                    UserId = ToGuid(u.Author.Id)
+                },
+                CreateDateTime = u.CreateDateTime,
+                Id=u.Id,
+                IsAnonymus=u.IsAnonymus,
+                Rating=u.Rating,
+                ReviewText=u.ReviewText,                
+            }).ToList();
             if (movie == null)
             {
                 throw new Exception("Film with this id doesn't exists");
@@ -72,10 +86,17 @@ namespace MovieCatalogBackend.Services
                 Description = movie.Description,
                 Director = movie.Director,
                 Fees = movie.Fees,
-                Reviews = reviews,
+                Reviews=reviews,
             };
             
         }
+        private static Guid ToGuid(int value)
+        {
+            byte[] bytes = new byte[16];
+            BitConverter.GetBytes(value).CopyTo(bytes, 0);
+            return new Guid(bytes);
+        }
+
     }
 }
 
