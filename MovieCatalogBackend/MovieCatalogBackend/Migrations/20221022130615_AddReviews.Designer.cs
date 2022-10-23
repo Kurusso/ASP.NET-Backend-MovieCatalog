@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieCatalogBackend.Context;
 
@@ -11,9 +12,10 @@ using MovieCatalogBackend.Context;
 namespace MovieCatalogBackend.Migrations
 {
     [DbContext(typeof(MovieCatalogDbContext))]
-    partial class MovieCatalogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221022130615_AddReviews")]
+    partial class AddReviews
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,11 +106,11 @@ namespace MovieCatalogBackend.Migrations
                     b.Property<bool>("IsAnonymus")
                         .HasColumnType("bit");
 
+                    b.Property<Guid?>("MovieDbModelId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Rating")
                         .HasColumnType("int");
-
-                    b.Property<Guid>("ReviewOnMovieID")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ReviewText")
                         .HasColumnType("nvarchar(max)");
@@ -117,7 +119,7 @@ namespace MovieCatalogBackend.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("ReviewOnMovieID");
+                    b.HasIndex("MovieDbModelId");
 
                     b.ToTable("Reviews");
                 });
@@ -129,9 +131,6 @@ namespace MovieCatalogBackend.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Avatar")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
@@ -175,15 +174,11 @@ namespace MovieCatalogBackend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MovieCatalogBackend.Models.MovieDbModel", "ReviewOnMovie")
+                    b.HasOne("MovieCatalogBackend.Models.MovieDbModel", null)
                         .WithMany("Reviews")
-                        .HasForeignKey("ReviewOnMovieID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MovieDbModelId");
 
                     b.Navigation("Author");
-
-                    b.Navigation("ReviewOnMovie");
                 });
 
             modelBuilder.Entity("MovieCatalogBackend.Models.MovieDbModel", b =>

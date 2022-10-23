@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieCatalogBackend.Context;
 
@@ -11,9 +12,10 @@ using MovieCatalogBackend.Context;
 namespace MovieCatalogBackend.Migrations
 {
     [DbContext(typeof(MovieCatalogDbContext))]
-    partial class MovieCatalogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221022150753_tested")]
+    partial class tested
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,7 +109,7 @@ namespace MovieCatalogBackend.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ReviewOnMovieID")
+                    b.Property<Guid>("ReviewOnMovieId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ReviewText")
@@ -117,7 +119,7 @@ namespace MovieCatalogBackend.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("ReviewOnMovieID");
+                    b.HasIndex("ReviewOnMovieId");
 
                     b.ToTable("Reviews");
                 });
@@ -129,9 +131,6 @@ namespace MovieCatalogBackend.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Avatar")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
@@ -177,7 +176,7 @@ namespace MovieCatalogBackend.Migrations
 
                     b.HasOne("MovieCatalogBackend.Models.MovieDbModel", "ReviewOnMovie")
                         .WithMany("Reviews")
-                        .HasForeignKey("ReviewOnMovieID")
+                        .HasForeignKey("ReviewOnMovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

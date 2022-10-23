@@ -6,20 +6,19 @@ namespace MovieCatalogBackend.Models.DTO
     {
         public Guid Id { get; set; }
 
-        [Required]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
-        [Required]
-        public string Poster { get; set; }
+        public string? Poster { get; set; }
 
         [Required]
         public int Year { get; set; }
 
-        [Required]
-        public string Country { get; set; }
+        public string? Country { get; set; }
 
         [Required]
-        public List<GenreModel> Genres { get; set; }
+        public ICollection<GenreModel> Genres { get; set; }
+
+        public ICollection<ReviewModel>? Reviews { get; set; }
 
         public int Time { get; set; }
 
