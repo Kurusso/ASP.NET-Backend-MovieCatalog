@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MovieCatalogBackend.Migrations;
 using MovieCatalogBackend.Models;
 using MovieCatalogBackend.Models.DTO;
 
