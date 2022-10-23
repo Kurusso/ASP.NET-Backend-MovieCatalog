@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieCatalogBackend.Context;
-using MovieCatalogBackend.Migrations;
 using MovieCatalogBackend.Models;
 using MovieCatalogBackend.Models.DTO;
 
@@ -59,7 +58,7 @@ namespace MovieCatalogBackend.Services
                 {
                     Avatar = u.Author.Avatar,
                     NickName = u.Author.UserName,
-                    UserId = ToGuid(u.Author.Id)
+                    UserId = u.Author.Id
                 },
                 CreateDateTime = u.CreateDateTime,
                 Id=u.Id,
@@ -89,12 +88,6 @@ namespace MovieCatalogBackend.Services
                 Reviews=reviews,
             };
             
-        }
-        private static Guid ToGuid(int value)
-        {
-            byte[] bytes = new byte[16];
-            BitConverter.GetBytes(value).CopyTo(bytes, 0);
-            return new Guid(bytes);
         }
 
     }

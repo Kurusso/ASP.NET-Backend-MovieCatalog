@@ -1,5 +1,4 @@
 ﻿using MovieCatalogBackend.Context;
-using MovieCatalogBackend.Migrations;
 using MovieCatalogBackend.Models;
 using MovieCatalogBackend.Models.DTO;
 
@@ -13,10 +12,10 @@ namespace MovieCatalogBackend.Services
             _context = context;
         }
         public async Task AddReview(ReviewModifyModel model, string userId, Guid MovieId)
-        {
-            var User = _context.Users.Find(int.Parse(userId));
+        {           
+            var User = _context.Users.Find(Guid.Parse(userId));
             var Movie = _context.Movies.Find(MovieId);
-            var currentReview = _context.Reviews.FirstOrDefault(x => x.AuthorId == int.Parse(userId) && x.ReviewOnMovieID==MovieId);
+            var currentReview = _context.Reviews.FirstOrDefault(x => x.AuthorId ==  Guid.Parse(userId) && x.ReviewOnMovieID==MovieId);
             if (currentReview != null)
             {
                 throw new Exception("You already have a review on this movie!");
@@ -43,7 +42,7 @@ namespace MovieCatalogBackend.Services
             {
                 throw new Exception("Review with this Id doesn't exists");
             }
-            if (review.AuthorId != int.Parse(userId))
+            if (review.AuthorId != new Guid(userId))
             {
                 throw new Exception("You can't delete review of other User");
             }
@@ -62,7 +61,7 @@ namespace MovieCatalogBackend.Services
             {
                 throw new Exception("Review with this Id doesn't exists");
             }
-            if (review.AuthorId != int.Parse(userId))
+            if (review.AuthorId != new Guid(userId))
             {
                 throw new Exception("You can't edit review of other User");
             }

@@ -28,6 +28,7 @@ namespace MovieCatalogBackend.Services
                     UserName = model.UserName,
                     BirthDate = model.BirthDate,
                     Gender = model.Gender,
+                    Id = Guid.NewGuid(),
                 });
                 await _context.SaveChangesAsync();
             }
