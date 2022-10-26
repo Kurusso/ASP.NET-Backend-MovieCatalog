@@ -11,9 +11,12 @@ namespace MovieCatalogBackend.Controllers
     public class ReviewController : ControllerBase
     {
         private IReviewAddService _reviewAddService;
-        public ReviewController(IReviewAddService reviewAdd)
+        private IUserIdentityService _userIdentityService;
+
+        public ReviewController(IReviewAddService reviewAdd, IUserIdentityService userIdentityService)
         {
             _reviewAddService = reviewAdd;
+            _userIdentityService = userIdentityService;
         }
         [HttpPost("{movieId}/review/add")]
         [Authorize]
@@ -23,44 +26,69 @@ namespace MovieCatalogBackend.Controllers
             {
                 return BadRequest(ModelState);
             }
-            try
+            string token = Request.Headers["Authorization"];
+            bool check = await _userIdentityService.CheckJwtIsInBlackList(token);
+            if (!check)
             {
-                await _reviewAddService.AddReview(model, User.FindFirst("IdClaim").Value, movieId);
-               return Ok();
+                try
+                {
+                    await _reviewAddService.AddReview(model, User.FindFirst("IdClaim").Value, movieId);
+                    return Ok();
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
             }
-            catch(Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return BadRequest("Jwt is in blacklist!");
             
         }
         [HttpPut("{movieId}/review/{id}/edit")]
         [Authorize]
         public async Task<IActionResult> Put(Guid movieId, Guid id, ReviewModifyModel model)
         {
-            try
+            if (!ModelState.IsValid)
             {
-               await _reviewAddService.UpdateReview(model, User.FindFirst("IdClaim").Value, movieId, id);
-                return Ok();
+                return BadRequest(ModelState);
+
             }
-            catch(Exception e)
+            string token = Request.Headers["Authorization"];
+            bool check = await _userIdentityService.CheckJwtIsInBlackList(token);
+            if (!check)
             {
-                return BadRequest(e.Message);
+                try
+                {
+                    await _reviewAddService.UpdateReview(model, User.FindFirst("IdClaim").Value, movieId, id);
+                    return Ok();
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
             }
+            return BadRequest("Jwt is in blacklist!");
+            
         }
         [HttpDelete("{movieId}/review/{id}/delete")]
         [Authorize]
         public async Task<IActionResult> Delete(Guid movieId, Guid id)
         {
-            try
+            string token = Request.Headers["Authorization"];
+            bool check = await _userIdentityService.CheckJwtIsInBlackList(token);
+            if (!check)
             {
-                await _reviewAddService.DeleteReview(User.FindFirst("IdClaim").Value, id, movieId);
-                return Ok();
+                try
+                {
+                    await _reviewAddService.DeleteReview(User.FindFirst("IdClaim").Value, id, movieId);
+                    return Ok();
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
             }
-            catch(Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return BadRequest("Jwt is in blacklist!");
+
             
         }
     }
