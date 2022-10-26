@@ -15,7 +15,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserAddService, UserAddService>();
+builder.Services.AddScoped<IFilmPageGetService, FilmPageGetService>();
 builder.Services.AddScoped<IUserIdentityService, UserIdentityService>();
+builder.Services.AddScoped<IReviewAddService, ReviewAddService>();
+builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
