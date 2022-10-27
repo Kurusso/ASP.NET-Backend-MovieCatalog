@@ -64,20 +64,30 @@ namespace MovieCatalogBackend.Controllers
                 
         }
         [HttpPost("logout")]
+        [Authorize]
         public IActionResult Logout()
         {
+            
+            string token = Request.Headers["Authorization"];
+            _userIdentityService.AddJwtInBlackList(token);
             var response = new
             {
                 access_token = "",
-                message = "Logged out"
+                message = token
             };
             return new JsonResult(response);
         }
         [HttpGet]
         [Authorize]
-        public IActionResult Test()
+        public async Task<IActionResult> Test()
         {
-            return Ok(User.Identity.Name);
+            string token = Request.Headers["Authorization"];
+            bool check = await _userIdentityService.CheckJwtIsInBlackList(token);
+            if (!check)
+            {
+                return Ok(User.Identity.Name);
+            }
+            return BadRequest("Jwt is in blacklist!");
         }
     }
 }

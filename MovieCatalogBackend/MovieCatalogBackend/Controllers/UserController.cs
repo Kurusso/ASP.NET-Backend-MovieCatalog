@@ -11,38 +11,58 @@ namespace MovieCatalogBackend.Controllers
     public class UserController : ControllerBase
     {
         private IUserProfileService _userProfileService;
-        public UserController(IUserProfileService userProfileService)
+        private IUserIdentityService _userIdentityService;
+
+        public UserController(IUserProfileService userProfileService, IUserIdentityService userIdentityService)
         {
             _userProfileService = userProfileService;
+            _userIdentityService = userIdentityService;
         }
 
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Get()
         {
-            try
+            string token = Request.Headers["Authorization"];
+            bool check = await _userIdentityService.CheckJwtIsInBlackList(token);
+            if (!check)
             {
-               var profile = _userProfileService.GetUserProfile(User.FindFirst("IdClaim").Value);
-                return Ok(profile);
+                try
+                {
+                    var profile = _userProfileService.GetUserProfile(User.FindFirst("IdClaim").Value);
+                    return Ok(profile);
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
             }
-            catch(Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return BadRequest("Jwt is in blacklist!");
+      
         }
         [HttpPut]
         [Authorize]
         public async Task <IActionResult> Put(ProfileModel model)
         {
-            try
+            if (!ModelState.IsValid) 
             {
-               await _userProfileService.ChangeUserProfile(model, User.FindFirst("IdClaim").Value);
-                return Ok();
+                return BadRequest(ModelState);
             }
-            catch(Exception e)
+            string token = Request.Headers["Authorization"];
+            bool check = await _userIdentityService.CheckJwtIsInBlackList(token);
+            if (!check)
             {
-                return BadRequest(e.Message);
+                try
+                {
+                    await _userProfileService.ChangeUserProfile(model, User.FindFirst("IdClaim").Value);
+                    return Ok();
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
             }
+            return BadRequest("Jwt is in blacklist!");           
         }
     }
 }
