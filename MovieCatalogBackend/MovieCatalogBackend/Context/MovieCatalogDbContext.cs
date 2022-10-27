@@ -9,6 +9,7 @@ namespace MovieCatalogBackend.Context
         public DbSet<MovieDbModel> Movies { get; set; }
         public DbSet<ReviewDbModel> Reviews { get; set; }
         public DbSet<JwtDbModel> Jwt { get; set; }
+        public DbSet<FavoriteMovies> FavoriteMovies { get; set; }
         public MovieCatalogDbContext(DbContextOptions<MovieCatalogDbContext> options) : base(options)
         {
             Database.EnsureCreated();

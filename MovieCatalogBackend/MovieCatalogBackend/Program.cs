@@ -19,6 +19,7 @@ builder.Services.AddScoped<IFilmPageGetService, FilmPageGetService>();
 builder.Services.AddScoped<IUserIdentityService, UserIdentityService>();
 builder.Services.AddScoped<IReviewAddService, ReviewAddService>();
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
+builder.Services.AddScoped<IFavoriteMovieService, FavoriteMovieService>();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
