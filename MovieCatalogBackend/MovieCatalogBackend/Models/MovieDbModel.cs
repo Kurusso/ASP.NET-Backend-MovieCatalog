@@ -23,6 +23,8 @@ namespace MovieCatalogBackend.Models
         [Required]
         public ICollection<GenreModel> Genres { get; set; }
 
+        public ICollection<FavoriteMovies> FavoriteByUsers { get; set; }
+
         public ICollection<ReviewDbModel> Reviews { get; set; }
 
         public int Time { get; set; }

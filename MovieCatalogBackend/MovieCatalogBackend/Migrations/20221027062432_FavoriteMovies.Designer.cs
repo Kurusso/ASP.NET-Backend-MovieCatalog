@@ -12,8 +12,8 @@ using MovieCatalogBackend.Context;
 namespace MovieCatalogBackend.Migrations
 {
     [DbContext(typeof(MovieCatalogDbContext))]
-    [Migration("20221026061803_jwt")]
-    partial class jwt
+    [Migration("20221027062432_FavoriteMovies")]
+    partial class FavoriteMovies
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,6 +42,29 @@ namespace MovieCatalogBackend.Migrations
                     b.HasIndex("MovieDbModelId");
 
                     b.ToTable("GenreModel");
+                });
+
+            modelBuilder.Entity("MovieCatalogBackend.Models.FavoriteMovies", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid>("MovieID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FavoriteMovies");
                 });
 
             modelBuilder.Entity("MovieCatalogBackend.Models.JwtDbModel", b =>
@@ -177,6 +200,25 @@ namespace MovieCatalogBackend.Migrations
                         .HasForeignKey("MovieDbModelId");
                 });
 
+            modelBuilder.Entity("MovieCatalogBackend.Models.FavoriteMovies", b =>
+                {
+                    b.HasOne("MovieCatalogBackend.Models.MovieDbModel", "Movie")
+                        .WithMany("FavoriteByUsers")
+                        .HasForeignKey("MovieID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MovieCatalogBackend.Models.UserDbModel", "User")
+                        .WithMany("FavoriteMovies")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("MovieCatalogBackend.Models.ReviewDbModel", b =>
                 {
                     b.HasOne("MovieCatalogBackend.Models.UserDbModel", "Author")
@@ -198,6 +240,8 @@ namespace MovieCatalogBackend.Migrations
 
             modelBuilder.Entity("MovieCatalogBackend.Models.MovieDbModel", b =>
                 {
+                    b.Navigation("FavoriteByUsers");
+
                     b.Navigation("Genres");
 
                     b.Navigation("Reviews");
@@ -205,6 +249,8 @@ namespace MovieCatalogBackend.Migrations
 
             modelBuilder.Entity("MovieCatalogBackend.Models.UserDbModel", b =>
                 {
+                    b.Navigation("FavoriteMovies");
+
                     b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618

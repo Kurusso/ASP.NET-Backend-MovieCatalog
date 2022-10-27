@@ -31,7 +31,25 @@ namespace MovieCatalogBackend.Controllers
             try
             {
                await _userAddService.AddUser(model);
-                return Ok(model);
+                var identity = _userIdentityService.GetIdentity(model.UserName, model.Password);
+                if (identity == null)
+                {
+                    return BadRequest(new { errorText = "Invalid username or password." });
+                }
+                var now = DateTime.UtcNow;
+                var jwt = new JwtSecurityToken(
+                    issuer: JwtConfiguration.Issuer,
+                    audience: JwtConfiguration.Audience,
+                    notBefore: now,
+                    claims: identity.Claims,
+                    expires: now.Add(new TimeSpan(0, 0, JwtConfiguration.Lifetime, 0)),
+                    signingCredentials: new SigningCredentials(JwtConfiguration.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+                var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+                var response = new
+                {
+                    token = encodedJwt,
+                };
+                return new JsonResult(response);
             }
             catch(ArgumentException e)
             {
@@ -57,8 +75,7 @@ namespace MovieCatalogBackend.Controllers
                 var encodedJwt= new JwtSecurityTokenHandler().WriteToken(jwt);
             var response = new
             {
-                acces_token = encodedJwt,
-                username = identity.Name
+                token = encodedJwt,
             };
             return new JsonResult(response);
                 
@@ -72,22 +89,11 @@ namespace MovieCatalogBackend.Controllers
             _userIdentityService.AddJwtInBlackList(token);
             var response = new
             {
-                access_token = "",
+                token = "",
                 message = token
             };
             return new JsonResult(response);
         }
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Test()
-        {
-            string token = Request.Headers["Authorization"];
-            bool check = await _userIdentityService.CheckJwtIsInBlackList(token);
-            if (!check)
-            {
-                return Ok(User.Identity.Name);
-            }
-            return BadRequest("Jwt is in blacklist!");
-        }
+
     }
 }
