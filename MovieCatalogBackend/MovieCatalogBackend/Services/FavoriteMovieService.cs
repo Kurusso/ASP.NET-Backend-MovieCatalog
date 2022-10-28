@@ -40,7 +40,7 @@ namespace MovieCatalogBackend.Services
 
         public async Task<List<MovieElementModel>> GetFavoriteMovies(Guid userId)
         {
-            var movies = _context.FavoriteMovies.Include(x => x.Movie).Where(u=>u.UserId==userId).Select(x=> new MovieElementModel()
+            var movies = _context.FavoriteMovies.Include(x => x.Movie).ThenInclude(t=>t.Genres).Where(u=>u.UserId==userId).Select(x=> new MovieElementModel()
             {
                 Country = x.Movie.Country,
                 Genres = x.Movie.Genres,

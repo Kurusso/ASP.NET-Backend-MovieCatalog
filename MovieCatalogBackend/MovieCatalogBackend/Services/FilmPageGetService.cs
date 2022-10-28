@@ -33,7 +33,7 @@ namespace MovieCatalogBackend.Services
                 throw new Exception("Incorrect page number");
             }
 
-            Movies = _context.Movies.Skip(_pageSize*(page-1)).Take(_pageSize).ToList();
+            Movies = _context.Movies.Include(u=>u.Genres).Skip(_pageSize*(page-1)).Take(_pageSize).ToList();
 
             MoviesElements = Movies.Select(x => new MovieElementModel() 
             { 
@@ -51,7 +51,7 @@ namespace MovieCatalogBackend.Services
 
         public async Task<MovieDetailsModel> GetFilmById(Guid id)
         {
-            var movie = _context.Movies.FirstOrDefault(x => x.Id == id);
+            var movie = _context.Movies.Include(u => u.Genres).FirstOrDefault(x => x.Id == id);
             var reviews = _context.Reviews.Where(x => x.ReviewOnMovieID == id).Select(u => new ReviewModel
             {
                 Author = new UserShortModel
