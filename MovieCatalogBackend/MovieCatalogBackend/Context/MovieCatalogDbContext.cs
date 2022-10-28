@@ -11,7 +11,8 @@ namespace MovieCatalogBackend.Context
         public DbSet<ReviewDbModel> Reviews { get; set; }
         public DbSet<JwtDbModel> Jwt { get; set; }
         public DbSet<FavoriteMovies> FavoriteMovies { get; set; }
-        public DbSet<GenreModel> Genres { get; set; }
+        public DbSet<GenreDbModel> Genres { get; set; }
+        public DbSet<MovieGenreDbModel> MoviesGenres { get; set; }
         public MovieCatalogDbContext(DbContextOptions<MovieCatalogDbContext> options) : base(options)
         {
             Database.EnsureCreated();

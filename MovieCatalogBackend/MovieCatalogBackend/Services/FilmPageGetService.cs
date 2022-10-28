@@ -38,8 +38,8 @@ namespace MovieCatalogBackend.Services
             MoviesElements = Movies.Select(x => new MovieElementModel() 
             { 
                 Country=x.Country, 
-                Genres=x.Genres, 
-                Id=x.Id, 
+                Genres= _context.MoviesGenres.Include(s => s.Genre).Where(s => s.MovieId == x.Id).Select(u => new GenreModel { Id = u.Genre.Id, Name = u.Genre.Name }).ToList(),
+                Id =x.Id, 
                 Name=x.Name, 
                 Poster=x.Poster, 
                 Year=x.Year,
@@ -75,7 +75,7 @@ namespace MovieCatalogBackend.Services
                 AgeLimit = movie.AgeLimit,
                 Budget = movie.Budget,
                 Country = movie.Country,
-                Genres = movie.Genres,
+                Genres = _context.MoviesGenres.Include(s => s.Genre).Where(s => s.MovieId == movie.Id).Select(u => new GenreModel { Id = u.Genre.Id, Name = u.Genre.Name }).ToList(),
                 Id = movie.Id,
                 Name = movie.Name,
                 Poster = movie.Poster,
