@@ -21,7 +21,7 @@ namespace MovieCatalogBackend.Models
         public string Country { get; set; }
 
         [Required]
-        public ICollection<GenreModel> Genres { get; set; }
+        public ICollection<MovieGenreDbModel> Genres { get; set; }
 
         public ICollection<FavoriteMovies> FavoriteByUsers { get; set; }
 
