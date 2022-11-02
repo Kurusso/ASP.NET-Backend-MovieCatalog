@@ -9,10 +9,10 @@ namespace MovieCatalogBackend.Controllers
     [ApiController]
     public class MovieController : ControllerBase
     {
-        private IFilmPageGetService _filmPageGetService;
-        public MovieController(IFilmPageGetService filmPageGetService)
+        private IMoviePageGetService _moviePageGetService;
+        public MovieController(IMoviePageGetService moviePageGetService)
         {
-            _filmPageGetService = filmPageGetService;
+            _moviePageGetService = moviePageGetService;
         }
 
         [HttpGet("{page}")]
@@ -21,7 +21,7 @@ namespace MovieCatalogBackend.Controllers
 
             try
             {
-                var PageModel = await _filmPageGetService.GetFilmsOnPage(page);
+                var PageModel = await _moviePageGetService.GetMoviesOnPage(page);
 
                 return Ok(new MoviesPagedListModel
                 {
@@ -41,7 +41,7 @@ namespace MovieCatalogBackend.Controllers
         {
             try
             {
-                return Ok(await _filmPageGetService.GetFilmById(id));
+                return Ok(await _moviePageGetService.GetMoviesById(id));
             }
             catch(Exception e)
             {
