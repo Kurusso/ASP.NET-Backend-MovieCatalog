@@ -13,7 +13,7 @@ namespace MovieCatalogBackend.Services
         }
         public async Task<ProfileModel> GetUserProfile(string id)
         {
-            var user = _context.Users.Find(Guid.Parse(id));
+            var user =  _context.Users.Find(Guid.Parse(id));
             if(user == null)
             {
                 throw new Exception("User doesn't exists");
@@ -48,7 +48,6 @@ namespace MovieCatalogBackend.Services
             {
                 throw new Exception("User with this ID already exists!");
             }
-            user.Id=model.Id;
             user.UserName = model.NickName;
             user.Avatar = model.AvatarLink;
             user.Name = model.Name;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieCatalogBackend.Models.DTO;
@@ -20,8 +21,8 @@ namespace MovieCatalogBackend.Controllers
         }
 
         [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Get()
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<ProfileModel>> Get()
         {
             string token = Request.Headers["Authorization"];
             bool check = await _userIdentityService.CheckJwtIsInBlackList(token);
@@ -29,7 +30,7 @@ namespace MovieCatalogBackend.Controllers
             {
                 try
                 {
-                    var profile = _userProfileService.GetUserProfile(User.FindFirst("IdClaim").Value);
+                    var profile = await _userProfileService.GetUserProfile(User.FindFirst("IdClaim").Value);
                     return Ok(profile);
                 }
                 catch (Exception e)
@@ -41,7 +42,7 @@ namespace MovieCatalogBackend.Controllers
       
         }
         [HttpPut]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task <IActionResult> Put(ProfileModel model)
         {
             if (!ModelState.IsValid) 
@@ -59,7 +60,7 @@ namespace MovieCatalogBackend.Controllers
                 }
                 catch (Exception e)
                 {
-                    return BadRequest(e.Message);
+                    return Problem(e.Message, statusCode:409);
                 }
             }
             return Unauthorized("Jwt is in blacklist!");           

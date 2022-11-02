@@ -9,21 +9,21 @@ namespace MovieCatalogBackend.Controllers
     [ApiController]
     public class MovieController : ControllerBase
     {
-        private IFilmPageGetService _filmPageGetService;
-        public MovieController(IFilmPageGetService filmPageGetService)
+        private IMoviePageGetService _moviePageGetService;
+        public MovieController(IMoviePageGetService moviePageGetService)
         {
-            _filmPageGetService = filmPageGetService;
+            _moviePageGetService = moviePageGetService;
         }
 
         [HttpGet("{page}")]
-        public async Task<IActionResult> GetPage(int page)
+        public async Task<ActionResult<MoviesPagedListModel>> GetPage(int page)
         {
 
             try
             {
-                var PageModel = await _filmPageGetService.GetFilmsOnPage(page);
+                var PageModel = await _moviePageGetService.GetMoviesOnPage(page);
 
-                return Ok(new
+                return Ok(new MoviesPagedListModel
                 {
                     Movies = PageModel.MovieElements,
                     PageInfo = PageModel.PageInfoModel
@@ -37,11 +37,11 @@ namespace MovieCatalogBackend.Controllers
 
         }
         [HttpGet("details/{id}")]
-        public async Task<IActionResult> GetMovieById(Guid id)
+        public async Task<ActionResult<MovieDetailsModel>> GetMovieById(Guid id)
         {
             try
             {
-                return Ok(await _filmPageGetService.GetFilmById(id));
+                return Ok(await _moviePageGetService.GetMoviesById(id));
             }
             catch(Exception e)
             {

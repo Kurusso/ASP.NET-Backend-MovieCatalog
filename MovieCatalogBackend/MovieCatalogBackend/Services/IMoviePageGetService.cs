@@ -4,9 +4,9 @@ using MovieCatalogBackend.Models.DTO;
 
 namespace MovieCatalogBackend.Services
 {
-    public interface IFilmPageGetService
+    public interface IMoviePageGetService
     {
-        public Task<PageModel> GetFilmsOnPage(int page);
-        public Task<MovieDetailsModel> GetFilmById(Guid id);
+        public Task<PageModel> GetMoviesOnPage(int page);
+        public Task<MovieDetailsModel> GetMoviesById(Guid id);
     }
 }

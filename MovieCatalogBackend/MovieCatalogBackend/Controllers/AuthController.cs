@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MovieCatalogBackend.Configurations;
@@ -81,7 +82,7 @@ namespace MovieCatalogBackend.Controllers
                 
         }
         [HttpPost("logout")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult Logout()
         {
             
@@ -90,7 +91,7 @@ namespace MovieCatalogBackend.Controllers
             var response = new
             {
                 token = "",
-                message = token
+                message = "Logged Out"
             };
             return new JsonResult(response);
         }

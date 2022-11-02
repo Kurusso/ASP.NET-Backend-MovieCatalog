@@ -6,19 +6,19 @@ using MovieCatalogBackend.Models.DTO;
 
 namespace MovieCatalogBackend.Services
 {
-    public class FilmPageGetService : IFilmPageGetService
+    public class MoviePageGetService : IMoviePageGetService
     {
         private MovieCatalogDbContext _context;
         private  List<MovieDbModel> Movies;
         private int _pageCount;
         private List<MovieElementModel> MoviesElements;
-        private int _pageSize = 10;
-        public FilmPageGetService(MovieCatalogDbContext context)
+        private int _pageSize = 6;
+        public MoviePageGetService(MovieCatalogDbContext context)
         {
             _context = context;
         }
          
-        public async Task<PageModel> GetFilmsOnPage(int page)
+        public async Task<PageModel> GetMoviesOnPage(int page)
         {
             if ((_context.Movies.Count() % _pageSize) == 0)
             {
@@ -49,7 +49,7 @@ namespace MovieCatalogBackend.Services
             return new PageModel { MovieElements=MoviesElements, PageInfoModel=new PageInfoModel { CurrentPage=page, PageCount=_pageCount, PageSize=MoviesElements.Count()} };
         }
 
-        public async Task<MovieDetailsModel> GetFilmById(Guid id)
+        public async Task<MovieDetailsModel> GetMoviesById(Guid id)
         {
             var movie = _context.Movies.Include(u => u.Genres).FirstOrDefault(x => x.Id == id);
             var reviews = _context.Reviews.Where(x => x.ReviewOnMovieID == id).Select(u => new ReviewModel
@@ -68,7 +68,7 @@ namespace MovieCatalogBackend.Services
             }).ToList();
             if (movie == null)
             {
-                throw new Exception("Film with this id doesn't exists");
+                throw new Exception("Movie with this id doesn't exists");
             }
             return new MovieDetailsModel
             {
