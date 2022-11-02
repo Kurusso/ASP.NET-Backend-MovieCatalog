@@ -53,7 +53,7 @@ namespace MovieCatalogBackend.Controllers
                 }
                 catch (Exception e)
                 {
-                    return BadRequest(e.Message);
+                    return NotFound(e.Message);
                 }
             }
             return Unauthorized("Jwt is in blacklist!");
@@ -73,7 +73,7 @@ namespace MovieCatalogBackend.Controllers
                 }
                 catch(Exception e)
                 {
-                    return BadRequest(e.Message);
+                    return NotFound(e.Message);
                 }
             }
             return Unauthorized("Jwt is in blacklist!");
