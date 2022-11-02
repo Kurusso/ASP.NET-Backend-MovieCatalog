@@ -32,7 +32,7 @@ namespace MovieCatalogBackend.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return NotFound(e.Message);
             }
 
         }
@@ -45,7 +45,7 @@ namespace MovieCatalogBackend.Controllers
             }
             catch(Exception e)
             {
-                return BadRequest(e.Message);
+                return NotFound(e.Message);
             } 
         }
     }
