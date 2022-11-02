@@ -16,14 +16,14 @@ namespace MovieCatalogBackend.Controllers
         }
 
         [HttpGet("{page}")]
-        public async Task<IActionResult> GetPage(int page)
+        public async Task<ActionResult<MoviesPagedListModel>> GetPage(int page)
         {
 
             try
             {
                 var PageModel = await _filmPageGetService.GetFilmsOnPage(page);
 
-                return Ok(new
+                return Ok(new MoviesPagedListModel
                 {
                     Movies = PageModel.MovieElements,
                     PageInfo = PageModel.PageInfoModel
@@ -37,7 +37,7 @@ namespace MovieCatalogBackend.Controllers
 
         }
         [HttpGet("details/{id}")]
-        public async Task<IActionResult> GetMovieById(Guid id)
+        public async Task<ActionResult<MovieDetailsModel>> GetMovieById(Guid id)
         {
             try
             {

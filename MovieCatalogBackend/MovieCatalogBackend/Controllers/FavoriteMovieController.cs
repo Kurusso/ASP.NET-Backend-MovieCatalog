@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieCatalogBackend.Models.DTO;
@@ -19,8 +20,8 @@ namespace MovieCatalogBackend.Controllers
         }
 
         [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Get()
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<MoviesListModel>> Get()
         {
             string token = Request.Headers["Authorization"];
             bool check = await _userIdentityService.CheckJwtIsInBlackList(token);
@@ -38,7 +39,7 @@ namespace MovieCatalogBackend.Controllers
             return Unauthorized("Jwt is in blacklist!");
         }
         [HttpPost("{id}/add")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Post(Guid id)
         {
             string token = Request.Headers["Authorization"];
@@ -58,7 +59,7 @@ namespace MovieCatalogBackend.Controllers
             return Unauthorized("Jwt is in blacklist!");
         }
         [HttpDelete("{id}/delete")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Delete(Guid id)
         {
             string token = Request.Headers["Authorization"];

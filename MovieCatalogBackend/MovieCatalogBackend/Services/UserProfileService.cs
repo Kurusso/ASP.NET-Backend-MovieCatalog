@@ -48,7 +48,6 @@ namespace MovieCatalogBackend.Services
             {
                 throw new Exception("User with this ID already exists!");
             }
-            user.Id=model.Id;
             user.UserName = model.NickName;
             user.Avatar = model.AvatarLink;
             user.Name = model.Name;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieCatalogBackend.Models.DTO;
@@ -19,7 +20,7 @@ namespace MovieCatalogBackend.Controllers
             _userIdentityService = userIdentityService;
         }
         [HttpPost("{movieId}/review/add")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Post(Guid movieId, ReviewModifyModel model)
         {
             if (!ModelState.IsValid)
@@ -44,7 +45,7 @@ namespace MovieCatalogBackend.Controllers
             
         }
         [HttpPut("{movieId}/review/{id}/edit")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Put(Guid movieId, Guid id, ReviewModifyModel model)
         {
             if (!ModelState.IsValid)
@@ -70,7 +71,7 @@ namespace MovieCatalogBackend.Controllers
             
         }
         [HttpDelete("{movieId}/review/{id}/delete")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Delete(Guid movieId, Guid id)
         {
             string token = Request.Headers["Authorization"];
