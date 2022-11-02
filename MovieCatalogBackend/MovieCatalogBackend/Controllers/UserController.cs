@@ -37,7 +37,7 @@ namespace MovieCatalogBackend.Controllers
                     return BadRequest(e.Message);
                 }
             }
-            return BadRequest("Jwt is in blacklist!");
+            return Unauthorized("Jwt is in blacklist!");
       
         }
         [HttpPut]
@@ -62,7 +62,7 @@ namespace MovieCatalogBackend.Controllers
                     return BadRequest(e.Message);
                 }
             }
-            return BadRequest("Jwt is in blacklist!");           
+            return Unauthorized("Jwt is in blacklist!");           
         }
     }
 }
