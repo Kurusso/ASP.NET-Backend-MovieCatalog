@@ -12,7 +12,7 @@ namespace MovieCatalogBackend.Services
         private  List<MovieDbModel> Movies;
         private int _pageCount;
         private List<MovieElementModel> MoviesElements;
-        private int _pageSize = 10;
+        private int _pageSize = 6;
         public FilmPageGetService(MovieCatalogDbContext context)
         {
             _context = context;

@@ -13,7 +13,7 @@ namespace MovieCatalogBackend.Services
         }
         public async Task<ProfileModel> GetUserProfile(string id)
         {
-            var user = _context.Users.Find(Guid.Parse(id));
+            var user =  _context.Users.Find(Guid.Parse(id));
             if(user == null)
             {
                 throw new Exception("User doesn't exists");

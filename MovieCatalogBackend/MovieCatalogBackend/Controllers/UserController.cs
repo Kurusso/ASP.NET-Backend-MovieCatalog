@@ -30,7 +30,7 @@ namespace MovieCatalogBackend.Controllers
             {
                 try
                 {
-                    var profile = _userProfileService.GetUserProfile(User.FindFirst("IdClaim").Value);
+                    var profile = await _userProfileService.GetUserProfile(User.FindFirst("IdClaim").Value);
                     return Ok(profile);
                 }
                 catch (Exception e)

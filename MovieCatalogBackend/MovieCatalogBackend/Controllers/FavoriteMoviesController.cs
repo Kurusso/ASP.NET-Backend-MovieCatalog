@@ -9,11 +9,11 @@ namespace MovieCatalogBackend.Controllers
 {
     [Route("/api/favorites")]
     [ApiController]
-    public class FavoriteMovieController : ControllerBase
+    public class FavoriteMoviesController : ControllerBase
     {
         private IUserIdentityService _userIdentityService;
         private IFavoriteMovieService _favoriteMovieService;
-        public FavoriteMovieController(IUserIdentityService userIdentityService, IFavoriteMovieService favoriteMovieService)
+        public FavoriteMoviesController(IUserIdentityService userIdentityService, IFavoriteMovieService favoriteMovieService)
         {
             _userIdentityService = userIdentityService;
             _favoriteMovieService = favoriteMovieService;
