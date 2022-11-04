@@ -15,13 +15,18 @@ namespace MovieCatalogBackend.Services
 
         public async Task AddMovieToFavorite(Guid movieId, Guid userId)
         {
+            var movie = _context.FavoriteMovies.FirstOrDefault(x => x.MovieID == movieId && x.UserId == userId);
+            if (movie != null)
+            {
+                throw new InvalidOperationException("You already have this movie in your Favourites!");
+            }
             if (_context.Users.FirstOrDefault(u => u.Id == userId) == null)
             {
-                throw new Exception("This user doesn't exist!");
+                throw new ArgumentException("This user doesn't exist!");
             }
             if (_context.Movies.FirstOrDefault(x => x.Id == movieId) == null)
             {
-                throw new Exception("This movie doesn't exist!");
+                throw new ArgumentException("This movie doesn't exist!");
             }
             _context.FavoriteMovies.Add(new FavoriteMovies { MovieID = movieId, UserId = userId });
             await _context.SaveChangesAsync();
