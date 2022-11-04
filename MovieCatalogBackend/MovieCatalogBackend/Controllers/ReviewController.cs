@@ -36,9 +36,13 @@ namespace MovieCatalogBackend.Controllers
                     await _reviewAddService.AddReview(model, User.FindFirst("IdClaim").Value, movieId);
                     return Ok();
                 }
-                catch (Exception e)
+                catch (ArgumentException e)
                 {
-                    return BadRequest(e.Message);
+                    return NotFound(e.Message);
+                }
+                catch(InvalidOperationException e)
+                {
+                    return Problem(e.Message, statusCode: 409);
                 }
             }
             return Unauthorized("Jwt is in blacklist!");
@@ -64,7 +68,7 @@ namespace MovieCatalogBackend.Controllers
                 }
                 catch (Exception e)
                 {
-                    return BadRequest(e.Message);
+                    return NotFound(e.Message);
                 }
             }
             return Unauthorized("Jwt is in blacklist!");
@@ -85,7 +89,7 @@ namespace MovieCatalogBackend.Controllers
                 }
                 catch (Exception e)
                 {
-                    return BadRequest(e.Message);
+                    return NotFound(e.Message);
                 }
             }
             return Unauthorized("Jwt is in blacklist!");

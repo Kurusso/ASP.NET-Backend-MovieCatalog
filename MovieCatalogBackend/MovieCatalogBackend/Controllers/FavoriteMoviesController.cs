@@ -51,9 +51,13 @@ namespace MovieCatalogBackend.Controllers
                     await _favoriteMovieService.AddMovieToFavorite(id, new Guid(User.FindFirst("IdClaim").Value));
                     return Ok();
                 }
-                catch (Exception e)
+                catch (ArgumentException e)
                 {
                     return NotFound(e.Message);
+                }
+                catch (InvalidOperationException e) 
+                {
+                    return Problem(e.Message, statusCode: 409);
                 }
             }
             return Unauthorized("Jwt is in blacklist!");
